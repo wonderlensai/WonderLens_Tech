@@ -1,4 +1,22 @@
-import { google } from 'googleapis';
+import { createClient } from 'redis';
+
+// Initialize Redis client (will be reused across requests)
+let redisClient = null;
+
+async function getRedisClient() {
+  if (!redisClient) {
+    redisClient = createClient({
+      url: process.env.REDIS_URL
+    });
+    
+    redisClient.on('error', (err) => console.error('Redis Client Error', err));
+    
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
+    }
+  }
+  return redisClient;
+}
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -14,39 +32,47 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Initialize Google Sheets API
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    // Get Redis client
+    const client = await getRedisClient();
+
+    // Create unique submission ID
+    const submissionId = `form-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Prepare submission data
+    const submissionData = {
+      id: submissionId,
+      timestamp: new Date().toISOString(),
+      name,
+      company,
+      email,
+      phone: phone || '',
+      industry: industry || '',
+      useCase: useCase || '',
+    };
+
+    // Store submission in Redis (as JSON string)
+    await client.set(`submission:${submissionId}`, JSON.stringify(submissionData));
+    
+    // Add to submissions list for easy retrieval (sorted by timestamp)
+    await client.zAdd('submissions:timeline', {
+      score: Date.now(),
+      value: submissionId
     });
 
-    const sheets = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-
-    // Append row to sheet
-    const timestamp = new Date().toISOString();
-    const values = [[timestamp, name, company, email, phone, industry, useCase]];
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range: 'Sheet1!A:G', // Adjust range as needed
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      requestBody: {
-        values,
-      },
-    });
+    // Also store by company for easy lookup
+    if (company) {
+      const companyKey = `company:${company.toLowerCase().replace(/\s+/g, '-')}`;
+      await client.sAdd(companyKey, submissionId);
+    }
 
     return res.status(200).json({ 
       success: true, 
-      message: 'Demo request submitted successfully!' 
+      message: 'Demo request submitted successfully!',
+      submissionId: submissionId
     });
 
   } catch (error) {
-    console.error('Error submitting form:', error);
+    console.error('Error storing form submission:', error);
     return res.status(500).json({ 
       error: 'Failed to submit form. Please try again later.' 
     });
