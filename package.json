@@ -1,0 +1,12 @@
+{
+  "name": "wonderlens-ai",
+  "version": "1.0.0",
+  "description": "WonderLens AI - Industrial Computer Vision Platform",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "googleapis": "^126.0.1"
+  },
+  "devDependencies": {}
+}

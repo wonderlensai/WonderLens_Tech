@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WonderLens AI | Industrial Computer Vision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030712', // Even deeper midnight
+                            primary: '#0F172A', // Slate 900
+                            secondary: '#1E293B', // Slate 800
+                            accent: '#06B6D4', // Cyan 500 - More "Tech/Lens"
+                            accentHover: '#22D3EE', // Cyan 400
+                            success: '#10B981', // Emerald 500
+                            text: '#F8FAFC', // Slate 50
+                            muted: '#94A3B8', // Slate 400
+                        }
+                    },
+                    animation: {
+                        'scan': 'scan 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%': { top: '0%', opacity: '0' },
+                            '10%': { opacity: '1' },
+                            '90%': { opacity: '1' },
+                            '100%': { top: '100%', opacity: '0' },
+                        },
+                        glow: {
+                            'from': { boxShadow: '0 0 10px -5px #06B6D4' },
+                            'to': { boxShadow: '0 0 25px -5px #06B6D4' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom utility for tech grid background */
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: linear-gradient(to bottom, transparent, 5%, white, 90%, transparent);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+        }
+        
+        /* Futuristic Card Hover */
+        .tech-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 0.75rem;
+            padding: 1px;
+            background: linear-gradient(45deg, transparent, rgba(6, 182, 212, 0.3), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+        }
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.15);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+        
+        /* Button Glitch/Hover Effect */
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        /* Scanline */
+        .scan-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #06B6D4;
+            box-shadow: 0 0 10px #06B6D4, 0 0 20px #06B6D4;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-brand-text font-sans antialiased selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold tracking-tighter flex items-center gap-2 group">
+                        <div class="relative w-4 h-4">
+                             <div class="absolute inset-0 bg-brand-accent rounded-full animate-ping opacity-75"></div>
+                             <div class="relative w-4 h-4 bg-brand-accent rounded-full"></div>
+                        </div>
+                        <span class="group-hover:text-brand-accentHover transition-colors">WonderLens<span class="text-brand-accent">AI</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#how-it-works" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">HOW IT WORKS</a>
+                        <a href="#use-cases" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">USE CASES</a>
+                        <a href="#industries" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">INDUSTRIES</a>
+                        <a href="#contact" class="btn-glow bg-brand-accent text-brand-dark hover:bg-brand-accentHover px-6 py-2.5 rounded-sm text-sm font-bold transition-all uppercase tracking-wider">
+                            Request Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0 opacity-10 bg-grid-pattern animate-pulse-slow"></div>
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl filter"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl filter"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-3 py-1 rounded border border-brand-accent/30 bg-brand-accent/5 text-brand-accent text-xs font-mono uppercase tracking-widest mb-6 backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 bg-brand-accent rounded-full mr-2 animate-pulse"></span> System V 3.0 Online
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-tight">
+                Turn Any Camera Into <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-cyan-200 to-purple-400 animate-gradient-x">Future Intelligence</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-brand-muted mb-10 font-light">
+                **WonderLens AI** transforms standard video feeds into real-time automation data. Detect, measure, and secure your operations with next-gen computer vision.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#contact" class="btn-glow inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-sm text-brand-dark bg-brand-accent hover:bg-brand-accentHover md:text-lg transition-all uppercase tracking-wider">
+                    Initialize Demo
+                </a>
+                <a href="#use-cases" class="inline-flex items-center justify-center px-8 py-4 border border-slate-600 text-base font-medium rounded-sm text-brand-text hover:border-brand-accent hover:text-brand-accent md:text-lg transition-all bg-slate-900/50 backdrop-blur-sm uppercase tracking-wider">
+                    Explore Capability
+                </a>
+            </div>
+        </div>
+        
+        <!-- Hero Visual / Scanner -->
+        <div class="mt-16 relative max-w-5xl mx-auto rounded-lg overflow-hidden border border-slate-700 shadow-[0_0_50px_-12px_rgba(6,182,212,0.25)] bg-slate-900 aspect-video flex items-center justify-center group">
+            
+            <!-- Scanning Animation -->
+            <div class="scan-line animate-scan"></div>
+            
+            <!-- Grid Overlay -->
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTAgNDBoMVYwaC0xeiIgZmlsbD0icmdiYSg2LCAxODIsIDIxMiwgMC4wNSkiLz48cGF0aCBkPSJNMCA0MGg0MHYtMWgtNDB6IiBmaWxsPSJyZ2JhKDYsIDE4MiwgMjEyLCAwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==')] opacity-20"></div>
+
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent z-10"></div>
+            
+            <!-- Simulation UI -->
+            <div class="text-center relative z-0 w-full h-full">
+                <div class="absolute top-4 left-4 font-mono text-xs text-brand-accent flex flex-col items-start gap-1">
+                    <span class="bg-brand-accent/10 px-2 py-0.5 rounded border border-brand-accent/20">CAM_01: ACTIVE</span>
+                    <span class="text-slate-500">RES: 4K // FPS: 60</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-4 w-full h-full absolute inset-0 p-12">
+                    <!-- Bounding Box 1 -->
+                    <div class="border border-brand-success rounded-sm relative h-32 w-32 top-10 left-10 group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute -top-5 left-0 text-[10px] bg-brand-success text-brand-dark px-1 font-mono font-bold">STATUS: OK</div>
+                        <div class="absolute inset-0 bg-brand-success/5 animate-pulse"></div>
+                        <!-- Target reticle corners -->
+                        <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-brand-success"></div>
+                        <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-brand-success"></div>
+                    </div>
+                    
+                    <!-- Bounding Box 2 -->
+                    <div class="border border-red-500 rounded-sm relative h-24 w-24 top-40 left-60 col-start-3 group-hover:scale-105 transition-transform duration-500 delay-75">
+                        <div class="absolute -top-5 left-0 text-[10px] bg-red-500 text-white px-1 font-mono font-bold">DEFECT DETECTED</div>
+                        <div class="absolute inset-0 bg-red-500/10 animate-pulse"></div>
+                         <!-- Target reticle corners -->
+                         <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-red-500"></div>
+                         <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-red-500"></div>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-4 right-4 text-right">
+                    <p class="text-xs font-mono text-brand-accent animate-pulse">PROCESSING STREAM...</p>
+                    <p class="text-[10px] font-mono text-slate-500">LATENCY: 12ms</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- What is WonderLens -->
+    <section class="py-20 bg-brand-secondary border-y border-slate-800 relative overflow-hidden">
+         <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-accent/5 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:text-center mb-16">
+                <h2 class="text-brand-accent font-mono text-sm tracking-widest uppercase mb-2">The Core Platform</h2>
+                <p class="text-3xl leading-8 font-bold tracking-tight text-white sm:text-4xl">
+                    The Neural Eye of Your Operation
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-brand-muted lg:mx-auto font-light">
+                    We don't sell cameras; we make your existing ones genius. Compatible with RTSP, USB, or Industrial sensors.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                <!-- Feature 1 -->
+                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Connect Any Sensor</h3>
+                        <p class="text-brand-muted">Ingest feeds from RTSP security cams, USB webcams, or high-end industrial sensors seamlessly.</p>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                     <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Neural Processing</h3>
+                        <p class="text-brand-muted">Deep learning models analyze pixels in real-time (15ms latency) to detect, measure, and count.</p>
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                     <div class="relative z-10">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Data Stream</h3>
+                        <p class="text-brand-muted">Turn video into dashboards, alerts, and API triggers. 24/7 machine consistency.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Problem (Futuristic Data Layout) -->
+    <section class="py-20 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">Why Automate?</h2>
+                    <p class="text-brand-muted mb-8 text-lg">Manual monitoring is the bottleneck of modern industry. Human eyes fatigue; silicon does not.</p>
+                    
+                    <div class="space-y-6">
+                        <!-- Item -->
+                        <div class="flex items-start group">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                                <span class="text-xs font-mono">01</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-white font-semibold group-hover:text-red-400 transition-colors">Human Error</h4>
+                                <p class="text-sm text-brand-muted">Subjectivity leads to missed defects and safety violations.</p>
+                            </div>
+                        </div>
+                        <!-- Item -->
+                        <div class="flex items-start group">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                                <span class="text-xs font-mono">02</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-white font-semibold group-hover:text-red-400 transition-colors">Data Black Holes</h4>
+                                <p class="text-sm text-brand-muted">Manual logs are slow, paper-based, and legally indefensible.</p>
+                            </div>
+                        </div>
+                        <!-- Item -->
+                        <div class="flex items-start group">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-brand-success/10 border border-brand-success/30 flex items-center justify-center mt-1 group-hover:bg-brand-success group-hover:text-white transition-colors">
+                                <span class="text-xs font-mono">03</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-white font-semibold group-hover:text-brand-success transition-colors">WonderLens Solution</h4>
+                                <p class="text-sm text-brand-muted">Machine consistency with expert-level visual understanding.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-brand-accent/10 blur-3xl rounded-full opacity-30 animate-pulse-slow"></div>
+                    <div class="relative bg-slate-900 rounded-lg p-8 border border-slate-700 shadow-2xl overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50"></div>
+                        <!-- Simulated Code Terminal -->
+                        <div class="font-mono text-xs md:text-sm text-slate-400 space-y-2">
+                            <div class="flex gap-2 mb-4 text-[10px]">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <p>> <span class="text-purple-400">import</span> WonderLens <span class="text-purple-400">as</span> wl</p>
+                            <p>> <span class="text-purple-400">const</span> stream = <span class="text-yellow-300">wl.connect</span>(<span class="text-green-300">'rtsp://factory-cam-04'</span>);</p>
+                            <p>> stream.on(<span class="text-green-300">'frame'</span>, <span class="text-brand-accent">async</span> (frame) => {</p>
+                            <p class="pl-4"><span class="text-purple-400">const</span> result = <span class="text-brand-accent">await</span> model.predict(frame);</p>
+                            <p class="pl-4"><span class="text-purple-400">if</span> (result.confidence > <span class="text-brand-accent">0.98</span>) {</p>
+                            <p class="pl-8 text-green-400">// 15ms inference time</p>
+                            <p class="pl-8"><span class="text-brand-accent">dashboard</span>.emit(result);</p>
+                            <p class="pl-4">}</p>
+                            <p>});</p>
+                            <div class="h-px bg-slate-800 my-4"></div>
+                            <div class="flex justify-between items-center text-white font-bold text-xs">
+                                <span>STATUS: <span class="text-brand-success animate-pulse">LIVE MONITORING</span></span>
+                                <span><span class="text-brand-accent">30,402</span> FRAMES PROCESSED</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section id="use-cases" class="py-20 bg-brand-secondary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Intelligence Modules</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-brand-muted">Deploy pre-trained neural networks or let us build a custom brain.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Case 1 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">💧</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_01</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">SV30 Sludge Settling</h3>
+                    <p class="text-sm text-brand-muted">Automate wastewater analysis. Monitor settling jars and track SVI in real-time, eliminating manual lab checks.</p>
+                </div>
+                <!-- Case 2 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🔍</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_02</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Quality Inspection</h3>
+                    <p class="text-sm text-brand-muted">Detect scratches, dents, or color inconsistencies on high-speed lines. Reject defective units instantly.</p>
+                </div>
+                <!-- Case 3 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">📦</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_03</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Counting & Measurement</h3>
+                    <p class="text-sm text-brand-muted">Track throughput automatically. Count boxes or measure dimensions to ensure tolerance specs.</p>
+                </div>
+                <!-- Case 4 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">👷</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_04</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">PPE & Safety</h3>
+                    <p class="text-sm text-brand-muted">Detect missing hard hats, vests, or goggles. Trigger alarms the moment a violation occurs.</p>
+                </div>
+                <!-- Case 5 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🚧</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_05</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Intrusion Detection</h3>
+                    <p class="text-sm text-brand-muted">Secure restricted areas. Differentiate between workers and forklifts. Set virtual perimeters.</p>
+                </div>
+                <!-- Case 6 -->
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🏷️</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_06</div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Barcode & OCR</h3>
+                    <p class="text-sm text-brand-muted">Read barcodes and text on packages at high speeds, linking visual data to your ERP.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-brand-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-white">Integration Flow</h2>
+            </div>
+            <div class="relative">
+                <!-- Connector Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-slate-800 via-brand-accent/50 to-slate-800 -translate-y-1/2 z-0"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Steps -->
+                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">01</div>
+                        <h3 class="text-lg font-bold mb-2">Connect</h3>
+                        <p class="text-xs text-brand-muted">RTSP / USB / GigE</p>
+                    </div>
+                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">02</div>
+                        <h3 class="text-lg font-bold mb-2">Process</h3>
+                        <p class="text-xs text-brand-muted">Edge / Cloud Inference</p>
+                    </div>
+                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">03</div>
+                        <h3 class="text-lg font-bold mb-2">Analyze</h3>
+                        <p class="text-xs text-brand-muted">Logic & Thresholds</p>
+                    </div>
+                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">04</div>
+                        <h3 class="text-lg font-bold mb-2">Act</h3>
+                        <p class="text-xs text-brand-muted">API / Alert / PLC</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inquiry Form -->
+    <section id="contact" class="py-20 bg-brand-secondary border-t border-slate-700">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-primary rounded-lg shadow-2xl overflow-hidden border border-slate-700 relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-brand-accent"></div>
+                <div class="p-8 md:p-12">
+                    <h2 class="text-3xl font-bold text-center mb-4">Initialize Deployment</h2>
+                    <p class="text-center text-brand-muted mb-10">Describe your visual environment. Our engineers will architect the solution.</p>
+                    
+                    <form id="demo-form" class="space-y-6">
+                        <div id="form-message" class="hidden p-4 rounded-sm text-sm font-mono"></div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Full Name *</label>
+                                <input type="text" name="name" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Company *</label>
+                                <input type="text" name="company" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="Acme Industries">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Email *</label>
+                                <input type="email" name="email" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="john@acme.com">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Phone</label>
+                                <input type="tel" name="phone" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="+1 (555) 000-0000">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Industry</label>
+                            <select name="industry" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white">
+                                <option value="">Select Industry</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Water/Wastewater">Water/Wastewater</option>
+                                <option value="Logistics">Logistics</option>
+                                <option value="Pharma">Pharma</option>
+                                <option value="Energy">Energy</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Use Case Description</label>
+                            <textarea name="useCase" rows="4" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="e.g., I need to count boxes on a conveyor belt..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="btn-glow w-full bg-brand-accent hover:bg-brand-accentHover text-brand-dark font-bold py-4 rounded-sm transition-all text-lg uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="btn-text">Request System Demo</span>
+                            <span id="btn-loading" class="hidden">Processing...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-slate-800 py-12 text-xs font-mono">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-xl font-bold text-white tracking-tighter">WonderLens<span class="text-brand-accent">AI</span></span>
+                <p class="text-brand-muted mt-1">Visual Intelligence Architecture.</p>
+            </div>
+            <div class="flex space-x-6 text-brand-muted">
+                <a href="#" class="hover:text-brand-accent transition-colors">PRIVACY_POLICY</a>
+                <a href="#" class="hover:text-brand-accent transition-colors">TERMS_OF_SERVICE</a>
+                <a href="#" class="hover:text-brand-accent transition-colors">SYSTEM_STATUS</a>
+            </div>
+            <div class="mt-4 md:mt-0 text-slate-600">
+                &copy; 2024 WonderLens AI. All Systems Operational.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handler
+        document.getElementById('demo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+            const messageDiv = document.getElementById('form-message');
+            
+            // Get form data
+            const formData = {
+                name: form.querySelector('[name="name"]').value,
+                company: form.querySelector('[name="company"]').value,
+                email: form.querySelector('[name="email"]').value,
+                phone: form.querySelector('[name="phone"]').value,
+                industry: form.querySelector('[name="industry"]').value,
+                useCase: form.querySelector('[name="useCase"]').value,
+            };
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            messageDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success
+                    messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-brand-success/10 border border-brand-success/30 text-brand-success';
+                    messageDiv.textContent = '✓ Demo request submitted successfully! We will contact you soon.';
+                    messageDiv.classList.remove('hidden');
+                    form.reset();
+                } else {
+                    // Error
+                    messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-red-400';
+                    messageDiv.textContent = `✕ ${data.error || 'Failed to submit. Please try again.'}`;
+                    messageDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-red-400';
+                messageDiv.textContent = '✕ Network error. Please check your connection and try again.';
+                messageDiv.classList.remove('hidden');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
