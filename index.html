@@ -206,23 +206,73 @@
                     <span class="text-slate-500">RES: 4K // FPS: 60</span>
                 </div>
                 
-                <div class="grid grid-cols-4 gap-4 w-full h-full absolute inset-0 p-12">
-                    <!-- Bounding Box 1 -->
-                    <div class="border border-brand-success rounded-sm relative h-32 w-32 top-10 left-10 group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute -top-5 left-0 text-[10px] bg-brand-success text-brand-dark px-1 font-mono font-bold">STATUS: OK</div>
-                        <div class="absolute inset-0 bg-brand-success/5 animate-pulse"></div>
-                        <!-- Target reticle corners -->
-                        <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-brand-success"></div>
-                        <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-brand-success"></div>
-                    </div>
+                <div class="grid grid-cols-3 gap-8 w-full h-full absolute inset-0 p-12 items-center justify-center">
                     
-                    <!-- Bounding Box 2 -->
-                    <div class="border border-red-500 rounded-sm relative h-24 w-24 top-40 left-60 col-start-3 group-hover:scale-105 transition-transform duration-500 delay-75">
-                        <div class="absolute -top-5 left-0 text-[10px] bg-red-500 text-white px-1 font-mono font-bold">DEFECT DETECTED</div>
-                        <div class="absolute inset-0 bg-red-500/10 animate-pulse"></div>
-                         <!-- Target reticle corners -->
-                         <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-red-500"></div>
-                         <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-red-500"></div>
+                    <!-- Bottle 1 (Underfilled) -->
+                    <div class="relative h-48 w-20 mx-auto group-hover:scale-105 transition-transform duration-500">
+                        <!-- Bottle Shape -->
+                        <div class="absolute inset-0 border-2 border-slate-600 rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <!-- Liquid Level (Low) -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[60%] bg-red-500/20 rounded-b-lg border-t border-red-500/50 transition-all duration-1000 animate-pulse"></div>
+                        <!-- Measurement Line -->
+                        <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-accent/30"></div>
+                        
+                        <!-- Analysis Box -->
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-red-500 text-white px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
+                            REJECT: -12mm
+                        </div>
+                        <!-- Data Overlay -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-400 font-mono text-xs font-bold">
+                            118mm
+                        </div>
+                    </div>
+
+                    <!-- Bottle 2 (Perfect) -->
+                    <div class="relative h-48 w-20 mx-auto scale-110 z-10 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                        <!-- Target Zone Indicator -->
+                        <div class="absolute -left-4 -right-4 top-[20%] bottom-[20%] border-2 border-brand-success/30 rounded-lg animate-pulse-slow"></div>
+                        
+                        <!-- Bottle Shape -->
+                        <div class="absolute inset-0 border-2 border-brand-success rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <!-- Liquid Level (Perfect) -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[75%] bg-brand-accent/20 rounded-b-lg border-t-2 border-brand-success transition-all duration-1000"></div>
+                        <!-- Measurement Line -->
+                        <div class="absolute top-[25%] left-[-20%] right-[-20%] border-t border-brand-success/50 flex items-center justify-between">
+                            <span class="text-[8px] text-brand-success bg-brand-dark px-1">- 130mm -</span>
+                        </div>
+                        
+                        <!-- Analysis Box -->
+                        <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] bg-brand-success text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded shadow-[0_0_10px_rgba(16,185,129,0.4)]">
+                            PASS: ±0.5mm
+                        </div>
+                        <!-- Data Overlay -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-success font-mono text-sm font-bold">
+                            130.0mm
+                        </div>
+                        <!-- Smart Lines -->
+                        <div class="absolute top-4 -right-12 flex flex-col gap-1 items-start">
+                            <div class="h-px w-8 bg-brand-success/50"></div>
+                            <span class="text-[8px] font-mono text-brand-success">CAP_SEAL: OK</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottle 3 (Overfilled) -->
+                    <div class="relative h-48 w-20 mx-auto group-hover:scale-105 transition-transform duration-500 delay-75">
+                        <!-- Bottle Shape -->
+                        <div class="absolute inset-0 border-2 border-slate-600 rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <!-- Liquid Level (High) -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[85%] bg-yellow-500/20 rounded-b-lg border-t border-yellow-500/50 transition-all duration-1000 animate-pulse"></div>
+                         <!-- Measurement Line -->
+                         <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-accent/30"></div>
+
+                        <!-- Analysis Box -->
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-yellow-500 text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
+                            WARN: +8mm
+                        </div>
+                        <!-- Data Overlay -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-mono text-xs font-bold">
+                            138mm
+                        </div>
                     </div>
                 </div>
                 
@@ -469,8 +519,8 @@
             <div class="bg-brand-primary rounded-lg shadow-2xl overflow-hidden border border-slate-700 relative">
                 <div class="absolute top-0 left-0 w-full h-1 bg-brand-accent"></div>
                 <div class="p-8 md:p-12">
-                    <h2 class="text-3xl font-bold text-center mb-4">Initialize Deployment</h2>
-                    <p class="text-center text-brand-muted mb-10">Describe your visual environment. Our engineers will architect the solution.</p>
+                    <h2 class="text-3xl font-bold text-center mb-4">Book a Call</h2>
+                    <p class="text-center text-brand-muted mb-10">Briefly describe your use case. Our engineers will architect the solution.</p>
                     
                     <form id="demo-form" class="space-y-6">
                         <div id="form-message" class="hidden p-4 rounded-sm text-sm font-mono"></div>
@@ -511,7 +561,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Use Case Description</label>
+                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Briefly describe your use case</label>
                             <textarea name="useCase" rows="4" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="e.g., I need to count boxes on a conveyor belt..."></textarea>
                         </div>
 
