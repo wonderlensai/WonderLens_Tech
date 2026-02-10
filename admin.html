@@ -5,8 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WonderLens AI - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#060608',
+                            primary: '#0C1018',
+                            iris: '#3B8CC4',
+                            irisLight: '#5AAAD8',
+                            amber: '#D4A54A',
+                            success: '#3D9B6B',
+                            danger: '#C45B5B',
+                            text: '#F0EDE6',
+                            muted: '#7E8694',
+                            accent: '#3B8CC4',
+                            accentHover: '#5AAAD8',
+                        }
+                    }
+                }
+            }
+        };
+    </script>
     <style>
-        body { background: #030712; color: #F8FAFC; font-family: 'Inter', sans-serif; }
+        body { background: #060608; color: #F0EDE6; font-family: 'JetBrains Mono', 'Inter', monospace; }
     </style>
 </head>
 <body class="p-8">
@@ -14,30 +38,30 @@
         <h1 class="text-3xl font-bold mb-6">WonderLens AI - Form Submissions</h1>
         
         <div id="stats" class="grid grid-cols-3 gap-4 mb-8">
-            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                <div class="text-sm text-slate-400">Total Submissions</div>
-                <div id="total-count" class="text-2xl font-bold text-brand-accent">-</div>
+            <div class="bg-brand-primary p-4 rounded-lg border border-brand-iris/20">
+                <div class="text-sm text-brand-muted">Total Submissions</div>
+                <div id="total-count" class="text-2xl font-bold text-brand-iris">-</div>
             </div>
-            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                <div class="text-sm text-slate-400">Unique Companies</div>
-                <div id="companies-count" class="text-2xl font-bold text-brand-accent">-</div>
+            <div class="bg-brand-primary p-4 rounded-lg border border-brand-iris/20">
+                <div class="text-sm text-brand-muted">Unique Companies</div>
+                <div id="companies-count" class="text-2xl font-bold text-brand-iris">-</div>
             </div>
-            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                <div class="text-sm text-slate-400">Last Updated</div>
-                <div id="last-update" class="text-sm text-slate-300">-</div>
+            <div class="bg-brand-primary p-4 rounded-lg border border-brand-iris/20">
+                <div class="text-sm text-brand-muted">Last Updated</div>
+                <div id="last-update" class="text-sm text-brand-text">-</div>
             </div>
         </div>
 
         <div class="mb-4 flex gap-4">
-            <button onclick="loadSubmissions()" class="bg-cyan-500 hover:bg-cyan-400 text-black px-4 py-2 rounded font-bold">
+            <button onclick="loadSubmissions()" class="border border-brand-iris bg-brand-iris/10 text-brand-iris hover:bg-brand-iris/20 px-4 py-2 rounded font-bold">
                 Refresh Data
             </button>
-            <button onclick="exportCSV()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded">
+            <button onclick="exportCSV()" class="border border-brand-amber/50 bg-brand-amber/10 text-brand-amber hover:bg-brand-amber/20 px-4 py-2 rounded">
                 Export CSV
             </button>
         </div>
 
-        <div id="loading" class="text-center py-8 text-slate-400">Loading submissions...</div>
+        <div id="loading" class="text-center py-8 text-brand-muted">Loading submissions...</div>
         <div id="error" class="hidden bg-red-900/20 border border-red-500/50 p-4 rounded mb-4"></div>
         <div id="submissions" class="space-y-4"></div>
     </div>
@@ -71,41 +95,41 @@
 
                 // Display submissions
                 if (submissionsData.length === 0) {
-                    submissions.innerHTML = '<div class="text-center py-8 text-slate-400">No submissions yet. Submit the form to see data here.</div>';
+                    submissions.innerHTML = '<div class="text-center py-8 text-brand-muted">No submissions yet. Submit the form to see data here.</div>';
                 } else {
                     submissions.innerHTML = submissionsData.map(sub => `
-                        <div class="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                        <div class="bg-brand-primary border border-brand-iris/20 rounded-lg p-6">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 class="text-xl font-bold text-white">${sub.name || 'N/A'}</h3>
-                                    <p class="text-cyan-400">${sub.company || 'N/A'}</p>
+                                    <h3 class="text-xl font-bold text-brand-text">${sub.name || 'N/A'}</h3>
+                                    <p class="text-brand-iris">${sub.company || 'N/A'}</p>
                                 </div>
-                                <div class="text-right text-sm text-slate-400">
+                                <div class="text-right text-sm text-brand-muted">
                                     <div>${new Date(sub.timestamp).toLocaleString()}</div>
                                     <div class="text-xs mt-1">ID: ${sub.id}</div>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                 <div>
-                                    <div class="text-slate-400">Email</div>
-                                    <div class="text-white"><a href="mailto:${sub.email}" class="text-cyan-400 hover:underline">${sub.email || 'N/A'}</a></div>
+                                    <div class="text-brand-muted">Email</div>
+                                    <div class="text-brand-text"><a href="mailto:${sub.email}" class="text-brand-iris hover:underline">${sub.email || 'N/A'}</a></div>
                                 </div>
                                 <div>
-                                    <div class="text-slate-400">Phone</div>
-                                    <div class="text-white">${sub.phone || 'N/A'}</div>
+                                    <div class="text-brand-muted">Phone</div>
+                                    <div class="text-brand-text">${sub.phone || 'N/A'}</div>
                                 </div>
                                 <div>
-                                    <div class="text-slate-400">Industry</div>
-                                    <div class="text-white">${sub.industry || 'N/A'}</div>
+                                    <div class="text-brand-muted">Industry</div>
+                                    <div class="text-brand-text">${sub.industry || 'N/A'}</div>
                                 </div>
                                 <div>
-                                    <div class="text-slate-400">Use Case</div>
-                                    <div class="text-white">${sub.useCase ? (sub.useCase.length > 50 ? sub.useCase.substring(0, 50) + '...' : sub.useCase) : 'N/A'}</div>
+                                    <div class="text-brand-muted">Use Case</div>
+                                    <div class="text-brand-text">${sub.useCase ? (sub.useCase.length > 50 ? sub.useCase.substring(0, 50) + '...' : sub.useCase) : 'N/A'}</div>
                                 </div>
                             </div>
-                            ${sub.useCase ? `<div class="mt-4 pt-4 border-t border-slate-700">
-                                <div class="text-slate-400 text-sm mb-1">Full Use Case:</div>
-                                <div class="text-white">${sub.useCase}</div>
+                            ${sub.useCase ? `<div class="mt-4 pt-4 border-t border-brand-iris/20">
+                                <div class="text-brand-muted text-sm mb-1">Full Use Case:</div>
+                                <div class="text-brand-text">${sub.useCase}</div>
                             </div>` : ''}
                         </div>
                     `).join('');
@@ -157,3 +181,4 @@
     </script>
 </body>
 </html>
+

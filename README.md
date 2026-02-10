@@ -1,74 +1,72 @@
-# WonderLens AI - Industrial Computer Vision Platform
+# WonderLens AI
 
-A futuristic landing page for WonderLens AI, an AI + Computer Vision platform that turns any camera into an industrial automation system.
+Industrial Computer Vision Platform
 
-## 🚀 Quick Start
-
-### Local Development
-Simply open `index.html` in any modern web browser.
-
-### Deploy to Vercel
-See **[QUICKSTART.md](./QUICKSTART.md)** for the fastest deployment path, or **[DEPLOYMENT.md](./DEPLOYMENT.md)** for detailed instructions.
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-├── index.html              # Main website
-├── api/
-│   ├── submit.js          # Form handler (Google Sheets API)
-│   └── submit-webhook.js  # Alternative handler (Webhook)
-├── package.json           # Dependencies
-├── vercel.json            # Vercel configuration
-├── DEPLOYMENT.md          # Detailed deployment guide
-├── QUICKSTART.md          # Quick deployment guide
-└── ENV_SETUP.md           # Environment variables setup
+├── frontend/          # Next.js application (UI + API routes)
+├── backend/          # Backend services (future: separate API server, workers, etc.)
+├── data/             # Data storage (frames, etc.)
+└── package.json      # Root workspace configuration
 ```
 
-## 🛠️ Technology Stack
+## Quick Start
 
-- **HTML5**: Semantic structure
-- **Tailwind CSS**: Utility-first CSS framework (via CDN)
-- **Inter + JetBrains Mono**: Modern typography
-- **Vercel Serverless Functions**: Form submission handling
-- **Google Sheets API**: Data storage
+### Install Dependencies
 
-## ✨ Features
+```bash
+npm run install:all
+```
 
-- ✅ Fully responsive design
-- ✅ Futuristic UI with microinteractions
-- ✅ Form submission to Google Sheets
-- ✅ No backend server required
-- ✅ Deploy-ready for Vercel
+Or install individually:
+```bash
+cd frontend && npm install
+cd ../backend && npm install
+```
 
-## 📝 Form Submission
+### Run Development Server
 
-The contact form automatically saves submissions to Google Sheets. Two integration methods available:
+```bash
+npm run dev
+```
 
-1. **Google Sheets API** (Recommended for production)
-2. **Google Apps Script Webhook** (Easier setup)
+This will start the Next.js frontend development server.
 
-See `DEPLOYMENT.md` for setup instructions.
+### Build for Production
 
-## 🎨 Customization
+```bash
+npm run build
+npm start
+```
 
-- Edit `index.html` for content changes
-- Modify Tailwind config in `<head>` for theme colors
-- Update `api/submit.js` for form handling logic
+## Frontend
 
-## 📚 Documentation
+The frontend is a Next.js 14 application with:
+- React components and pages
+- API routes (in `app/api/`)
+- Video upload and processing
+- Frame extraction and display
 
-- **[QUICKSTART.md](./QUICKSTART.md)** - Get deployed in 5 minutes
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment guide
-- **[ENV_SETUP.md](./ENV_SETUP.md)** - Environment variables reference
+See `frontend/README.md` for more details.
 
-## 🔒 Security
+## Backend
 
-- Never commit service account keys
-- Use Vercel environment variables for secrets
-- Form validation on both client and server side
+The backend folder is reserved for future services:
+- Separate API server (if needed)
+- Background workers
+- Microservices
+- etc.
 
----
+Currently, API routes are handled by Next.js in the frontend.
 
-**Built with ❤️ for WonderLens AI**
+## Environment Variables
 
+See `ENV_SETUP.md` for environment variable configuration.
 
+## Documentation
+
+- `QUICKSTART_NEXTJS.md` - Quick start guide
+- `NEXTJS_SETUP.md` - Detailed setup instructions
+- `ENV_SETUP.md` - Environment variables guide
+- `IMPLEMENTATION_SUMMARY.md` - Complete implementation overview

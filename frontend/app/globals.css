@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+
+  /* Lab clinical fonts */
+  --font-sans: "Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",sans-serif;
+  --font-mono: "JetBrains Mono","SF Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  /*
+   * Human eye background:
+   * - Central iris glow (blue) from above
+   * - Limbal ring warmth (amber) offset
+   * - Pupil-black base
+   */
+  background:
+    radial-gradient(800px 500px at 50% -180px, rgba(59, 140, 196, 0.18), transparent 65%),
+    radial-gradient(400px 300px at 60% -100px, rgba(212, 165, 74, 0.10), transparent 55%),
+    radial-gradient(600px 600px at 50% 50%, rgba(59, 140, 196, 0.03), transparent 70%),
+    #060608;
+  color: #F0EDE6;
+}
+
+::selection {
+  background: rgba(59, 140, 196, 0.40);
+  color: #060608;
+}
+
+/* ── Lab grid overlay — faint graph paper ── */
+.lab-grid {
+  background-image:
+    linear-gradient(to right, rgba(59,140,196,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59,140,196,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Iris ring — concentric radial gradient ── */
+.iris-ring {
+  background:
+    radial-gradient(circle at center, rgba(59,140,196,0.25) 0%, rgba(59,140,196,0.08) 40%, rgba(212,165,74,0.06) 60%, transparent 72%);
+}
+
+/* ── Section divider — amber accent line ── */
+.lab-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,165,74,0.30), rgba(59,140,196,0.20), transparent);
+}
+
+/* Subtle reveal used across sections. */
+.wl-reveal {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.wl-reveal[data-inview="true"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.wl-draw .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wl-draw[data-inview="true"] .draw {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .wl-reveal { transition: none; transform: none; opacity: 1; }
+  .wl-draw path,
+  .wl-draw line,
+  .wl-draw .draw { transition: none; stroke-dashoffset: 0; }
+}

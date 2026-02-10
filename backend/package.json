@@ -1,0 +1,12 @@
+{
+  "name": "wonderlens-backend",
+  "version": "1.0.0",
+  "description": "Backend services for WonderLens AI",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "echo 'Backend services - to be implemented'",
+    "start": "echo 'Backend services - to be implemented'"
+  },
+  "dependencies": {}
+}

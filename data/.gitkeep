@@ -1,0 +1,3 @@
+# This directory stores extracted video frames
+# Frames are stored in ./data/frames/<upload_id>/
+# This directory is gitignored to avoid committing large files

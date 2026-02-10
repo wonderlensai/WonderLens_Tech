@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WonderLens AI | Industrial Computer Vision</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -16,14 +16,22 @@
                     },
                     colors: {
                         brand: {
-                            dark: '#030712', // Even deeper midnight
-                            primary: '#0F172A', // Slate 900
-                            secondary: '#1E293B', // Slate 800
-                            accent: '#06B6D4', // Cyan 500 - More "Tech/Lens"
-                            accentHover: '#22D3EE', // Cyan 400
-                            success: '#10B981', // Emerald 500
-                            text: '#F8FAFC', // Slate 50
-                            muted: '#94A3B8', // Slate 400
+                            dark: '#060608',       // Pupil center
+                            primary: '#0C1018',    // Deep iris
+                            secondary: '#141A26',  // Mid iris
+                            iris: '#3B8CC4',       // Primary iris blue
+                            irisLight: '#5AAAD8',  // Light iris ring
+                            irisDim: '#2A6A96',    // Dark iris ring
+                            amber: '#D4A54A',      // Limbal golden ring
+                            amberDim: '#A88030',   // Dark amber
+                            success: '#3D9B6B',    // Lab green
+                            danger: '#C45B5B',     // Lab red
+                            text: '#F0EDE6',       // Sclera white
+                            muted: '#7E8694',      // Corneal grey
+                            faint: '#4A5060',      // Faint labels
+                            // backwards compat
+                            accent: '#3B8CC4',
+                            accentHover: '#5AAAD8',
                         }
                     },
                     animation: {
@@ -39,8 +47,8 @@
                             '100%': { top: '100%', opacity: '0' },
                         },
                         glow: {
-                            'from': { boxShadow: '0 0 10px -5px #06B6D4' },
-                            'to': { boxShadow: '0 0 25px -5px #06B6D4' },
+                            'from': { boxShadow: '0 0 10px -5px #3B8CC4' },
+                            'to': { boxShadow: '0 0 25px -5px #3B8CC4' },
                         }
                     }
                 }
@@ -48,20 +56,21 @@
         }
     </script>
     <style>
-        /* Custom utility for tech grid background */
+        /* Lab grid — graph paper feel */
         .bg-grid-pattern {
-            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
-                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(59,140,196,0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(59,140,196,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
             mask-image: linear-gradient(to bottom, transparent, 5%, white, 90%, transparent);
         }
+        /* Nav — frosted iris glass */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(6, 6, 8, 0.85);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+            border-bottom: 1px solid rgba(59, 140, 196, 0.25);
         }
         
-        /* Futuristic Card Hover */
+        /* Card hover — iris glow */
         .tech-card {
             position: relative;
             overflow: hidden;
@@ -73,37 +82,44 @@
             top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 0.75rem;
             padding: 1px;
-            background: linear-gradient(45deg, transparent, rgba(6, 182, 212, 0.3), transparent);
+            background: linear-gradient(45deg, transparent, rgba(59, 140, 196, 0.40), transparent);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
-            opacity: 0.5;
+            opacity: 0.6;
         }
         .tech-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.15);
-            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(59, 140, 196, 0.25);
+            border-color: rgba(59, 140, 196, 0.5);
         }
         
-        /* Button Glitch/Hover Effect */
+        /* Button glow — iris */
         .btn-glow:hover {
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
-            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+            box-shadow: 0 0 24px rgba(59, 140, 196, 0.50);
+            text-shadow: 0 0 8px rgba(240, 237, 230, 0.6);
         }
 
-        /* Scanline */
+        /* Scanline — iris blue */
         .scan-line {
             position: absolute;
             left: 0;
             width: 100%;
             height: 2px;
-            background: #06B6D4;
-            box-shadow: 0 0 10px #06B6D4, 0 0 20px #06B6D4;
+            background: #3B8CC4;
+            box-shadow: 0 0 10px #3B8CC4, 0 0 25px #3B8CC4;
             z-index: 20;
+        }
+
+        /* Iris ring — hero background */
+        .iris-bg {
+            background:
+                radial-gradient(700px 450px at 50% -150px, rgba(59, 140, 196, 0.20), transparent 65%),
+                radial-gradient(350px 250px at 58% -80px, rgba(212, 165, 74, 0.12), transparent 55%);
         }
     </style>
 </head>
-<body class="bg-brand-dark text-brand-text font-sans antialiased selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
+<body class="bg-brand-dark text-brand-text font-sans antialiased selection:bg-brand-iris selection:text-brand-dark overflow-x-hidden">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 top-0 transition-all duration-300 glass-panel">
@@ -115,8 +131,8 @@
                         <svg class="w-10 h-10 transition-transform group-hover:scale-110 duration-300" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="lens-gradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#06B6D4" />
-                                <stop offset="100%" stop-color="#3B82F6" />
+                                <stop offset="0%" stop-color="#3B8CC4" />
+                                <stop offset="100%" stop-color="#D4A54A" />
                                 </linearGradient>
                                 <filter id="glow-logo" x="-50%" y="-50%" width="200%" height="200%">
                                 <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -135,24 +151,25 @@
                                 fill="none"
                                 class="opacity-80 origin-center animate-[spin_12s_linear_infinite]" />
                             <!-- Inner Ring -->
-                            <circle cx="20" cy="20" r="6" stroke="#F8FAFC" stroke-width="1.5" stroke-opacity="0.9" />
-                            <!-- Core -->
-                            <circle cx="20" cy="20" r="3" fill="#06B6D4" filter="url(#glow-logo)">
+                            <circle cx="20" cy="20" r="6" stroke="#3B8CC4" stroke-width="1.5" stroke-opacity="0.9" />
+                            <!-- Core (pupil) -->
+                            <circle cx="20" cy="20" r="3" fill="#060608" filter="url(#glow-logo)">
                                 <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite" />
                             </circle>
                             <!-- Crosshairs -->
-                            <path d="M2 20H8 M32 20H38 M20 2V8 M20 32V38" stroke="#06B6D4" stroke-width="1" stroke-linecap="round" opacity="0.4" />
+                            <path d="M2 20H8 M32 20H38 M20 2V8 M20 32V38" stroke="#3B8CC4" stroke-width="1" stroke-linecap="round" opacity="0.5" />
                         </svg>
-                        <span class="group-hover:text-brand-accentHover transition-colors">WonderLens<span class="text-brand-accent">AI</span></span>
+                        <span class="group-hover:text-brand-irisLight transition-colors font-mono">WonderLens<span class="text-brand-iris">AI</span></span>
                     </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#how-it-works" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">HOW IT WORKS</a>
-                        <a href="#use-cases" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">USE CASES</a>
-                        <a href="#industries" class="hover:text-brand-accent transition-colors px-3 py-2 rounded-md text-sm font-medium tracking-wide">INDUSTRIES</a>
-                        <a href="#contact" class="btn-glow bg-brand-accent text-brand-dark hover:bg-brand-accentHover px-6 py-2.5 rounded-sm text-sm font-bold transition-all uppercase tracking-wider">
-                            Request Demo
+                        <a href="#how-it-works" class="hover:text-brand-iris transition-colors px-3 py-2 rounded-md text-sm font-mono tracking-wide">HOW IT WORKS</a>
+                        <a href="#use-cases" class="hover:text-brand-iris transition-colors px-3 py-2 rounded-md text-sm font-mono tracking-wide">USE CASES</a>
+                        <a href="#industries" class="hover:text-brand-iris transition-colors px-3 py-2 rounded-md text-sm font-mono tracking-wide">INDUSTRIES</a>
+                        <a href="#contact" class="hover:text-brand-amber transition-colors px-3 py-2 rounded-md text-sm font-mono tracking-wide">Request Demo</a>
+                        <a href="/app" data-app-link class="btn-glow border border-brand-iris bg-brand-iris/10 text-brand-iris hover:bg-brand-iris/20 px-6 py-2.5 rounded text-sm font-mono font-bold transition-all uppercase tracking-wider">
+                            Analyze Video
                         </a>
                     </div>
                 </div>
@@ -161,35 +178,38 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32">
+    <div class="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32 iris-bg">
         <!-- Background Elements -->
-        <div class="absolute inset-0 z-0 opacity-10 bg-grid-pattern animate-pulse-slow"></div>
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl filter"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl filter"></div>
+        <div class="absolute inset-0 z-0 opacity-20 bg-grid-pattern"></div>
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-iris/15 rounded-full blur-[100px] filter"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-amber/12 rounded-full blur-[80px] filter"></div>
         
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center px-3 py-1 rounded border border-brand-accent/30 bg-brand-accent/5 text-brand-accent text-xs font-mono uppercase tracking-widest mb-6 backdrop-blur-sm">
-                <span class="w-1.5 h-1.5 bg-brand-accent rounded-full mr-2 animate-pulse"></span> System V 3.0 Online
+            <div class="inline-flex items-center px-3 py-1 rounded border border-brand-iris/40 bg-brand-iris/10 text-brand-iris text-xs font-mono uppercase tracking-widest mb-6 backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 bg-brand-iris rounded-full mr-2 animate-pulse"></span> System V 3.0 Online
             </div>
             <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-tight">
                 Turn Any Camera Into <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-cyan-200 to-purple-400 animate-gradient-x">Future Intelligence</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-iris via-brand-irisLight to-brand-amber">Future Intelligence</span>
             </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-brand-muted mb-10 font-light">
-                **WonderLens AI** transforms standard video feeds into real-time automation data. Detect, measure, and secure your operations with next-gen computer vision.
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-brand-muted mb-10 font-mono font-light">
+                <strong class="text-brand-text">WonderLens AI</strong> transforms standard video feeds into real-time automation data. Detect, measure, and secure your operations with next-gen computer vision.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#contact" class="btn-glow inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-sm text-brand-dark bg-brand-accent hover:bg-brand-accentHover md:text-lg transition-all uppercase tracking-wider">
-                    Request Demo
+                <a href="/app" data-app-link class="btn-glow inline-flex items-center justify-center px-8 py-4 border border-brand-iris bg-brand-iris/15 text-brand-iris hover:bg-brand-iris/25 md:text-lg transition-all uppercase tracking-wider font-mono font-bold rounded">
+                    Analyze A Video
                 </a>
-                <a href="#use-cases" class="inline-flex items-center justify-center px-8 py-4 border border-slate-600 text-base font-medium rounded-sm text-brand-text hover:border-brand-accent hover:text-brand-accent md:text-lg transition-all bg-slate-900/50 backdrop-blur-sm uppercase tracking-wider">
+                <a href="#use-cases" class="inline-flex items-center justify-center px-8 py-4 border border-brand-amber/50 text-base font-mono font-medium rounded text-brand-amber hover:border-brand-amber hover:bg-brand-amber/10 md:text-lg transition-all backdrop-blur-sm uppercase tracking-wider">
                     Explore Capability
                 </a>
+            </div>
+            <div class="mt-6 text-xs font-mono text-brand-faint">
+                App path: <a href="/app" data-app-link class="text-brand-iris hover:text-brand-irisLight underline underline-offset-4">/app</a>
             </div>
         </div>
         
         <!-- Hero Visual / Scanner -->
-        <div class="mt-16 relative max-w-5xl mx-auto rounded-lg overflow-hidden border border-slate-700 shadow-[0_0_50px_-12px_rgba(6,182,212,0.25)] bg-slate-900 aspect-video flex items-center justify-center group">
+        <div class="mt-16 relative max-w-5xl mx-auto rounded-lg overflow-hidden border border-brand-iris/30 shadow-[0_0_60px_-12px_rgba(59,140,196,0.35)] bg-brand-primary aspect-video flex items-center justify-center group">
             
             <!-- Scanning Animation -->
             <div class="scan-line animate-scan"></div>
@@ -201,9 +221,9 @@
             
             <!-- Simulation UI -->
             <div class="text-center relative z-0 w-full h-full">
-                <div class="absolute top-4 left-4 font-mono text-xs text-brand-accent flex flex-col items-start gap-1">
-                    <span class="bg-brand-accent/10 px-2 py-0.5 rounded border border-brand-accent/20">CAM_01: ACTIVE</span>
-                    <span class="text-slate-500">RES: 4K // FPS: 60</span>
+                <div class="absolute top-4 left-4 font-mono text-xs text-brand-iris flex flex-col items-start gap-1">
+                    <span class="bg-brand-iris/10 px-2 py-0.5 rounded border border-brand-iris/20">CAM_01: ACTIVE</span>
+                    <span class="text-brand-faint">RES: 4K // FPS: 60</span>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-8 w-full h-full absolute inset-0 p-12 items-center justify-center">
@@ -211,38 +231,38 @@
                     <!-- Bottle 1 (Underfilled) -->
                     <div class="relative h-48 w-20 mx-auto group-hover:scale-105 transition-transform duration-500">
                         <!-- Bottle Shape -->
-                        <div class="absolute inset-0 border-2 border-slate-600 rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <div class="absolute inset-0 border-2 border-brand-iris/30 rounded-t-full rounded-b-lg bg-brand-secondary/50 backdrop-blur-sm"></div>
                         <!-- Liquid Level (Low) -->
                         <div class="absolute bottom-0 left-0 right-0 h-[60%] bg-red-500/20 rounded-b-lg border-t border-red-500/50 transition-all duration-1000 animate-pulse"></div>
                         <!-- Measurement Line -->
-                        <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-accent/30"></div>
+                        <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-iris/30"></div>
                         
                         <!-- Analysis Box -->
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-red-500 text-white px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-brand-danger text-brand-text px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
                             REJECT: -12mm
                         </div>
                         <!-- Data Overlay -->
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-400 font-mono text-xs font-bold">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-danger font-mono text-xs font-bold">
                             118mm
                         </div>
                     </div>
 
                     <!-- Bottle 2 (Perfect) -->
-                    <div class="relative h-48 w-20 mx-auto scale-110 z-10 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                    <div class="relative h-48 w-20 mx-auto scale-110 z-10 shadow-[0_0_30px_rgba(59,140,196,0.30)]">
                         <!-- Target Zone Indicator -->
                         <div class="absolute -left-4 -right-4 top-[20%] bottom-[20%] border-2 border-brand-success/30 rounded-lg animate-pulse-slow"></div>
                         
                         <!-- Bottle Shape -->
-                        <div class="absolute inset-0 border-2 border-brand-success rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <div class="absolute inset-0 border-2 border-brand-success rounded-t-full rounded-b-lg bg-brand-secondary/50 backdrop-blur-sm"></div>
                         <!-- Liquid Level (Perfect) -->
-                        <div class="absolute bottom-0 left-0 right-0 h-[75%] bg-brand-accent/20 rounded-b-lg border-t-2 border-brand-success transition-all duration-1000"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-[75%] bg-brand-iris/20 rounded-b-lg border-t-2 border-brand-success transition-all duration-1000"></div>
                         <!-- Measurement Line -->
                         <div class="absolute top-[25%] left-[-20%] right-[-20%] border-t border-brand-success/50 flex items-center justify-between">
                             <span class="text-[8px] text-brand-success bg-brand-dark px-1">- 130mm -</span>
                         </div>
                         
                         <!-- Analysis Box -->
-                        <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] bg-brand-success text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded shadow-[0_0_10px_rgba(16,185,129,0.4)]">
+                        <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] bg-brand-success text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded shadow-[0_0_10px_rgba(74,124,89,0.4)]">
                             PASS: ±0.5mm
                         </div>
                         <!-- Data Overlay -->
@@ -259,39 +279,54 @@
                     <!-- Bottle 3 (Overfilled) -->
                     <div class="relative h-48 w-20 mx-auto group-hover:scale-105 transition-transform duration-500 delay-75">
                         <!-- Bottle Shape -->
-                        <div class="absolute inset-0 border-2 border-slate-600 rounded-t-full rounded-b-lg bg-slate-800/50 backdrop-blur-sm"></div>
+                        <div class="absolute inset-0 border-2 border-brand-iris/30 rounded-t-full rounded-b-lg bg-brand-secondary/50 backdrop-blur-sm"></div>
                         <!-- Liquid Level (High) -->
                         <div class="absolute bottom-0 left-0 right-0 h-[85%] bg-yellow-500/20 rounded-b-lg border-t border-yellow-500/50 transition-all duration-1000 animate-pulse"></div>
                          <!-- Measurement Line -->
-                         <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-accent/30"></div>
+                         <div class="absolute top-[25%] left-[-10%] right-[-10%] border-t border-dashed border-brand-iris/30"></div>
 
                         <!-- Analysis Box -->
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-yellow-500 text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] bg-brand-amber text-brand-dark px-2 py-0.5 font-mono font-bold whitespace-nowrap rounded">
                             WARN: +8mm
                         </div>
                         <!-- Data Overlay -->
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-mono text-xs font-bold">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-brand-amber font-mono text-xs font-bold">
                             138mm
                         </div>
                     </div>
                 </div>
                 
                 <div class="absolute bottom-4 right-4 text-right">
-                    <p class="text-xs font-mono text-brand-accent animate-pulse">PROCESSING STREAM...</p>
-                    <p class="text-[10px] font-mono text-slate-500">LATENCY: 12ms</p>
+                    <p class="text-xs font-mono text-brand-iris animate-pulse">PROCESSING STREAM...</p>
+                    <p class="text-[10px] font-mono text-brand-faint">LATENCY: 12ms</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+      // If someone opens this via file:// (double-clicking index.html), /app won't work.
+      // Show a clear hint instead of silently failing.
+      (function () {
+        if (window.location.protocol !== 'file:') return;
+        var links = document.querySelectorAll('[data-app-link]');
+        links.forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            e.preventDefault();
+            alert('The /app route is part of the Next.js site. Open this project via a server (e.g. run: npm run dev and visit http://localhost:3000), or use your deployed Vercel URL.');
+          });
+        });
+      })();
+    </script>
+
     <!-- What is WonderLens -->
-    <section class="py-20 bg-brand-secondary border-y border-slate-800 relative overflow-hidden">
-         <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-accent/5 to-transparent"></div>
+    <section class="py-20 bg-brand-secondary border-y border-brand-iris/20 relative overflow-hidden">
+         <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-iris/8 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="lg:text-center mb-16">
-                <h2 class="text-brand-accent font-mono text-sm tracking-widest uppercase mb-2">The Core Platform</h2>
-                <p class="text-3xl leading-8 font-bold tracking-tight text-white sm:text-4xl">
-                    The Neural Eye of Your Operation
+                <h2 class="text-brand-amber font-mono text-sm tracking-widest uppercase mb-2">The Core Platform</h2>
+                <p class="text-3xl leading-8 font-bold tracking-tight text-brand-text sm:text-4xl">
+                    The Neural <span class="text-brand-iris">Eye</span> of Your Operation
                 </p>
                 <p class="mt-4 max-w-2xl text-xl text-brand-muted lg:mx-auto font-light">
                     We don't sell cameras; we make your existing ones genius. Compatible with RTSP, USB, or Industrial sensors.
@@ -300,35 +335,35 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
                 <!-- Feature 1 -->
-                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <div class="p-8 bg-brand-primary rounded border border-brand-iris/20 hover:border-brand-iris/50 transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-iris/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                     <div class="relative z-10">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-primary text-brand-iris mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(59,140,196,0.5)] transition-all">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Connect Any Sensor</h3>
+                        <h3 class="text-xl font-bold text-brand-text mb-3">Connect Any Sensor</h3>
                         <p class="text-brand-muted">Ingest feeds from RTSP security cams, USB webcams, or high-end industrial sensors seamlessly.</p>
                     </div>
                 </div>
                 <!-- Feature 2 -->
-                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <div class="p-8 bg-brand-primary rounded border border-brand-iris/20 hover:border-brand-iris/50 transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-iris/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                      <div class="relative z-10">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-primary text-brand-iris mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(59,140,196,0.5)] transition-all">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Neural Processing</h3>
+                        <h3 class="text-xl font-bold text-brand-text mb-3">Neural Processing</h3>
                         <p class="text-brand-muted">Deep learning models analyze pixels in real-time (15ms latency) to detect, measure, and count.</p>
                     </div>
                 </div>
                 <!-- Feature 3 -->
-                <div class="p-8 bg-brand-primary rounded-sm border border-slate-700 hover:border-brand-accent transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-brand-accent/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <div class="p-8 bg-brand-primary rounded border border-brand-iris/20 hover:border-brand-iris/50 transition-all duration-300 group hover:-translate-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-iris/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                      <div class="relative z-10">
-                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-slate-800 text-brand-accent mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.5)] transition-all">
+                        <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-primary text-brand-iris mb-6 group-hover:shadow-[0_0_20px_-5px_rgba(59,140,196,0.5)] transition-all">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Data Stream</h3>
+                        <h3 class="text-xl font-bold text-brand-text mb-3">Data Stream</h3>
                         <p class="text-brand-muted">Turn video into dashboards, alerts, and API triggers. 24/7 machine consistency.</p>
                     </div>
                 </div>
@@ -347,60 +382,60 @@
                     <div class="space-y-6">
                         <!-- Item -->
                         <div class="flex items-start group">
-                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-brand-text transition-colors">
                                 <span class="text-xs font-mono">01</span>
                             </div>
                             <div class="ml-4">
-                                <h4 class="text-white font-semibold group-hover:text-red-400 transition-colors">Human Error</h4>
+                                <h4 class="text-brand-text font-semibold group-hover:text-brand-danger transition-colors">Human Error</h4>
                                 <p class="text-sm text-brand-muted">Subjectivity leads to missed defects and safety violations.</p>
                             </div>
                         </div>
                         <!-- Item -->
                         <div class="flex items-start group">
-                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-red-500/10 border border-red-500/30 flex items-center justify-center mt-1 group-hover:bg-red-500 group-hover:text-brand-text transition-colors">
                                 <span class="text-xs font-mono">02</span>
                             </div>
                             <div class="ml-4">
-                                <h4 class="text-white font-semibold group-hover:text-red-400 transition-colors">Data Black Holes</h4>
+                                <h4 class="text-brand-text font-semibold group-hover:text-brand-danger transition-colors">Data Black Holes</h4>
                                 <p class="text-sm text-brand-muted">Manual logs are slow, paper-based, and legally indefensible.</p>
                             </div>
                         </div>
                         <!-- Item -->
                         <div class="flex items-start group">
-                            <div class="flex-shrink-0 h-6 w-6 rounded bg-brand-success/10 border border-brand-success/30 flex items-center justify-center mt-1 group-hover:bg-brand-success group-hover:text-white transition-colors">
+                            <div class="flex-shrink-0 h-6 w-6 rounded bg-brand-success/10 border border-brand-success/30 flex items-center justify-center mt-1 group-hover:bg-brand-success group-hover:text-brand-text transition-colors">
                                 <span class="text-xs font-mono">03</span>
                             </div>
                             <div class="ml-4">
-                                <h4 class="text-white font-semibold group-hover:text-brand-success transition-colors">WonderLens Solution</h4>
+                                <h4 class="text-brand-text font-semibold group-hover:text-brand-success transition-colors">WonderLens Solution</h4>
                                 <p class="text-sm text-brand-muted">Machine consistency with expert-level visual understanding.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="absolute inset-0 bg-brand-accent/10 blur-3xl rounded-full opacity-30 animate-pulse-slow"></div>
-                    <div class="relative bg-slate-900 rounded-lg p-8 border border-slate-700 shadow-2xl overflow-hidden">
+                    <div class="absolute inset-0 bg-brand-iris/10 blur-3xl rounded-full opacity-30 animate-pulse-slow"></div>
+                    <div class="relative bg-brand-primary rounded-lg p-8 border border-brand-iris/20 shadow-2xl overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50"></div>
                         <!-- Simulated Code Terminal -->
-                        <div class="font-mono text-xs md:text-sm text-slate-400 space-y-2">
+                        <div class="font-mono text-xs md:text-sm text-brand-muted space-y-2">
                             <div class="flex gap-2 mb-4 text-[10px]">
                                 <div class="w-3 h-3 rounded-full bg-red-500"></div>
                                 <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                                 <div class="w-3 h-3 rounded-full bg-green-500"></div>
                             </div>
-                            <p>> <span class="text-purple-400">import</span> WonderLens <span class="text-purple-400">as</span> wl</p>
-                            <p>> <span class="text-purple-400">const</span> stream = <span class="text-yellow-300">wl.connect</span>(<span class="text-green-300">'rtsp://factory-cam-04'</span>);</p>
-                            <p>> stream.on(<span class="text-green-300">'frame'</span>, <span class="text-brand-accent">async</span> (frame) => {</p>
-                            <p class="pl-4"><span class="text-purple-400">const</span> result = <span class="text-brand-accent">await</span> model.predict(frame);</p>
-                            <p class="pl-4"><span class="text-purple-400">if</span> (result.confidence > <span class="text-brand-accent">0.98</span>) {</p>
-                            <p class="pl-8 text-green-400">// 15ms inference time</p>
-                            <p class="pl-8"><span class="text-brand-accent">dashboard</span>.emit(result);</p>
+                            <p>> <span class="text-brand-irisLight">import</span> WonderLens <span class="text-brand-irisLight">as</span> wl</p>
+                            <p>> <span class="text-brand-irisLight">const</span> stream = <span class="text-brand-amber">wl.connect</span>(<span class="text-brand-success">'rtsp://factory-cam-04'</span>);</p>
+                            <p>> stream.on(<span class="text-brand-success">'frame'</span>, <span class="text-brand-iris">async</span> (frame) => {</p>
+                            <p class="pl-4"><span class="text-brand-irisLight">const</span> result = <span class="text-brand-iris">await</span> model.predict(frame);</p>
+                            <p class="pl-4"><span class="text-brand-irisLight">if</span> (result.confidence > <span class="text-brand-iris">0.98</span>) {</p>
+                            <p class="pl-8 text-brand-success">// 15ms inference time</p>
+                            <p class="pl-8"><span class="text-brand-iris">dashboard</span>.emit(result);</p>
                             <p class="pl-4">}</p>
                             <p>});</p>
-                            <div class="h-px bg-slate-800 my-4"></div>
-                            <div class="flex justify-between items-center text-white font-bold text-xs">
+                            <div class="h-px bg-brand-secondary my-4"></div>
+                            <div class="flex justify-between items-center text-brand-text font-bold text-xs">
                                 <span>STATUS: <span class="text-brand-success animate-pulse">LIVE MONITORING</span></span>
-                                <span><span class="text-brand-accent">30,402</span> FRAMES PROCESSED</span>
+                                <span><span class="text-brand-iris">30,402</span> FRAMES PROCESSED</span>
                             </div>
                         </div>
                     </div>
@@ -413,63 +448,63 @@
     <section id="use-cases" class="py-20 bg-brand-secondary">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Intelligence Modules</h2>
+                <h2 class="text-3xl font-bold tracking-tight text-brand-text sm:text-4xl">Intelligence Modules</h2>
                 <p class="mt-4 max-w-2xl mx-auto text-brand-muted">Deploy pre-trained neural networks or let us build a custom brain.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Case 1 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">💧</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_01</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">💧</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_01</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">SV30 Sludge Settling</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">SV30 Sludge Settling</h3>
                     <p class="text-sm text-brand-muted">Automate wastewater analysis. Monitor settling jars and track SVI in real-time, eliminating manual lab checks.</p>
                 </div>
                 <!-- Case 2 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🔍</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_02</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">🔍</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_02</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Quality Inspection</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">Quality Inspection</h3>
                     <p class="text-sm text-brand-muted">Detect scratches, dents, or color inconsistencies on high-speed lines. Reject defective units instantly.</p>
                 </div>
                 <!-- Case 3 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">📦</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_03</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">📦</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_03</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Counting & Measurement</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">Counting & Measurement</h3>
                     <p class="text-sm text-brand-muted">Track throughput automatically. Count boxes or measure dimensions to ensure tolerance specs.</p>
                 </div>
                 <!-- Case 4 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">👷</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_04</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">👷</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_04</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">PPE & Safety</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">PPE & Safety</h3>
                     <p class="text-sm text-brand-muted">Detect missing hard hats, vests, or goggles. Trigger alarms the moment a violation occurs.</p>
                 </div>
                 <!-- Case 5 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🚧</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_05</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">🚧</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_05</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Intrusion Detection</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">Intrusion Detection</h3>
                     <p class="text-sm text-brand-muted">Secure restricted areas. Differentiate between workers and forklifts. Set virtual perimeters.</p>
                 </div>
                 <!-- Case 6 -->
-                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-slate-700">
+                <div class="tech-card bg-brand-primary p-6 rounded-lg border border-brand-iris/20">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-slate-800/50 rounded flex items-center justify-center text-xl">🏷️</div>
-                        <div class="text-[10px] font-mono text-brand-muted border border-slate-700 px-2 py-0.5 rounded">MOD_06</div>
+                        <div class="w-10 h-10 bg-brand-secondary/50 rounded flex items-center justify-center text-xl">🏷️</div>
+                        <div class="text-[10px] font-mono text-brand-muted border border-brand-iris/20 px-2 py-0.5 rounded">MOD_06</div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Barcode & OCR</h3>
+                    <h3 class="text-lg font-bold text-brand-text mb-2">Barcode & OCR</h3>
                     <p class="text-sm text-brand-muted">Read barcodes and text on packages at high speeds, linking visual data to your ERP.</p>
                 </div>
             </div>
@@ -480,31 +515,31 @@
     <section id="how-it-works" class="py-20 bg-brand-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-white">Integration Flow</h2>
+                <h2 class="text-3xl font-bold tracking-tight text-brand-text">Integration Flow</h2>
             </div>
             <div class="relative">
                 <!-- Connector Line -->
-                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-slate-800 via-brand-accent/50 to-slate-800 -translate-y-1/2 z-0"></div>
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-brand-iris/40 to-transparent -translate-y-1/2 z-0"></div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
                     <!-- Steps -->
-                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
-                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">01</div>
+                    <div class="bg-brand-secondary p-6 rounded border border-brand-iris/25 text-center hover:border-brand-iris transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-iris border border-brand-iris rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-iris group-hover:text-brand-dark transition-colors">01</div>
                         <h3 class="text-lg font-bold mb-2">Connect</h3>
                         <p class="text-xs text-brand-muted">RTSP / USB / GigE</p>
                     </div>
-                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
-                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">02</div>
+                    <div class="bg-brand-secondary p-6 rounded border border-brand-iris/25 text-center hover:border-brand-iris transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-iris border border-brand-iris rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-iris group-hover:text-brand-dark transition-colors">02</div>
                         <h3 class="text-lg font-bold mb-2">Process</h3>
                         <p class="text-xs text-brand-muted">Edge / Cloud Inference</p>
                     </div>
-                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
-                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">03</div>
+                    <div class="bg-brand-secondary p-6 rounded border border-brand-iris/25 text-center hover:border-brand-iris transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-iris border border-brand-iris rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-iris group-hover:text-brand-dark transition-colors">03</div>
                         <h3 class="text-lg font-bold mb-2">Analyze</h3>
                         <p class="text-xs text-brand-muted">Logic & Thresholds</p>
                     </div>
-                    <div class="bg-brand-secondary p-6 rounded border border-slate-600 text-center hover:border-brand-accent transition-colors group">
-                        <div class="w-8 h-8 bg-brand-dark text-brand-accent border border-brand-accent rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-accent group-hover:text-brand-dark transition-colors">04</div>
+                    <div class="bg-brand-secondary p-6 rounded border border-brand-iris/25 text-center hover:border-brand-iris transition-colors group">
+                        <div class="w-8 h-8 bg-brand-dark text-brand-iris border border-brand-iris rounded flex items-center justify-center font-mono text-sm mx-auto mb-4 group-hover:bg-brand-iris group-hover:text-brand-dark transition-colors">04</div>
                         <h3 class="text-lg font-bold mb-2">Act</h3>
                         <p class="text-xs text-brand-muted">API / Alert / PLC</p>
                     </div>
@@ -514,10 +549,10 @@
     </section>
 
     <!-- Inquiry Form -->
-    <section id="contact" class="py-20 bg-brand-secondary border-t border-slate-700">
+    <section id="contact" class="py-20 bg-brand-secondary border-t border-brand-iris/20">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-brand-primary rounded-lg shadow-2xl overflow-hidden border border-slate-700 relative">
-                <div class="absolute top-0 left-0 w-full h-1 bg-brand-accent"></div>
+            <div class="bg-brand-primary rounded-lg shadow-2xl overflow-hidden border border-brand-iris/20 relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-brand-iris"></div>
                 <div class="p-8 md:p-12">
                     <h2 class="text-3xl font-bold text-center mb-4">Book a Call</h2>
                     <p class="text-center text-brand-muted mb-10">Briefly describe your use case. Our engineers will architect the solution.</p>
@@ -527,29 +562,29 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Full Name *</label>
-                                <input type="text" name="name" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="John Doe">
+                                <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Full Name *</label>
+                                <input type="text" name="name" required class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text placeholder-brand-faint transition-colors focus:bg-brand-primary" placeholder="John Doe">
                             </div>
                             <div>
-                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Company *</label>
-                                <input type="text" name="company" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="Acme Industries">
+                                <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Company *</label>
+                                <input type="text" name="company" required class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text placeholder-brand-faint transition-colors focus:bg-brand-primary" placeholder="Acme Industries">
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Email *</label>
-                                <input type="email" name="email" required class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="john@acme.com">
+                                <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Email *</label>
+                                <input type="email" name="email" required class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text placeholder-brand-faint transition-colors focus:bg-brand-primary" placeholder="john@acme.com">
                             </div>
                             <div>
-                                <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Phone</label>
-                                <input type="tel" name="phone" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="+1 (555) 000-0000">
+                                <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Phone</label>
+                                <input type="tel" name="phone" class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text placeholder-brand-faint transition-colors focus:bg-brand-primary" placeholder="+1 (555) 000-0000">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Industry</label>
-                            <select name="industry" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white">
+                            <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Industry</label>
+                            <select name="industry" class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text">
                                 <option value="">Select Industry</option>
                                 <option value="Manufacturing">Manufacturing</option>
                                 <option value="Water/Wastewater">Water/Wastewater</option>
@@ -561,11 +596,11 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-mono text-brand-accent mb-2 uppercase tracking-wider">Briefly describe your use case</label>
-                            <textarea name="useCase" rows="4" class="w-full bg-brand-dark border border-slate-600 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-accent text-white placeholder-slate-700 transition-colors focus:bg-slate-900" placeholder="e.g., I need to count boxes on a conveyor belt..."></textarea>
+                            <label class="block text-xs font-mono text-brand-amber mb-2 uppercase tracking-wider">Briefly describe your use case</label>
+                            <textarea name="useCase" rows="4" class="w-full bg-brand-dark border border-brand-iris/25/25 rounded-sm px-4 py-3 focus:outline-none focus:border-brand-iris text-brand-text placeholder-brand-faint transition-colors focus:bg-brand-primary" placeholder="e.g., I need to count boxes on a conveyor belt..."></textarea>
                         </div>
 
-                        <button type="submit" id="submit-btn" class="btn-glow w-full bg-brand-accent hover:bg-brand-accentHover text-brand-dark font-bold py-4 rounded-sm transition-all text-lg uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" id="submit-btn" class="btn-glow w-full bg-brand-iris hover:bg-brand-irisHover text-brand-dark font-bold py-4 rounded-sm transition-all text-lg uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
                             <span id="btn-text">Request System Demo</span>
                             <span id="btn-loading" class="hidden">Processing...</span>
                         </button>
@@ -576,26 +611,26 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-brand-dark border-t border-slate-800 py-12 text-xs font-mono">
+    <footer class="bg-brand-dark border-t border-brand-iris/15 py-12 text-xs font-mono">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
             <div class="mb-4 md:mb-0 flex items-center gap-3">
                 <!-- Small Footer Logo -->
                 <svg class="w-8 h-8 opacity-80" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 4L23 10H34L30 16L36 26H28L26 34L20 28L14 34L12 26H4L10 16L6 10H17L20 4Z" stroke="#06B6D4" stroke-width="1.5" fill="none"/>
-                    <circle cx="20" cy="20" r="6" stroke="#F8FAFC" stroke-width="1.5"/>
-                    <circle cx="20" cy="20" r="2" fill="#06B6D4"/>
+                    <path d="M20 4L23 10H34L30 16L36 26H28L26 34L20 28L14 34L12 26H4L10 16L6 10H17L20 4Z" stroke="#3B8CC4" stroke-width="1.5" fill="none"/>
+                    <circle cx="20" cy="20" r="6" stroke="#3B8CC4" stroke-width="1.5"/>
+                    <circle cx="20" cy="20" r="2" fill="#060608"/>
                 </svg>
                 <div>
-                    <span class="text-xl font-bold text-white tracking-tighter">WonderLens<span class="text-brand-accent">AI</span></span>
+                    <span class="text-xl font-bold text-brand-text tracking-tighter">WonderLens<span class="text-brand-iris">AI</span></span>
                     <p class="text-brand-muted text-[10px]">Visual Intelligence Architecture.</p>
                 </div>
             </div>
             <div class="flex space-x-6 text-brand-muted">
-                <a href="#" class="hover:text-brand-accent transition-colors">PRIVACY_POLICY</a>
-                <a href="#" class="hover:text-brand-accent transition-colors">TERMS_OF_SERVICE</a>
-                <a href="#" class="hover:text-brand-accent transition-colors">SYSTEM_STATUS</a>
+                <a href="#" class="hover:text-brand-iris transition-colors">PRIVACY_POLICY</a>
+                <a href="#" class="hover:text-brand-iris transition-colors">TERMS_OF_SERVICE</a>
+                <a href="#" class="hover:text-brand-iris transition-colors">SYSTEM_STATUS</a>
             </div>
-            <div class="mt-4 md:mt-0 text-slate-600">
+            <div class="mt-4 md:mt-0 text-brand-faint">
                 &copy; 2024 WonderLens AI. All Systems Operational.
             </div>
         </div>
@@ -647,12 +682,12 @@
                     form.reset();
                 } else {
                     // Error
-                    messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-red-400';
+                    messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-brand-danger';
                     messageDiv.textContent = `✕ ${data.error || 'Failed to submit. Please try again.'}`;
                     messageDiv.classList.remove('hidden');
                 }
             } catch (error) {
-                messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-red-400';
+                messageDiv.className = 'p-4 rounded-sm text-sm font-mono bg-red-500/10 border border-red-500/30 text-brand-danger';
                 messageDiv.textContent = '✕ Network error. Please check your connection and try again.';
                 messageDiv.classList.remove('hidden');
             } finally {
