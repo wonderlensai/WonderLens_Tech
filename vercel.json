@@ -3,10 +3,5 @@
   "buildCommand": "cd frontend && npm run build",
   "devCommand": "cd frontend && npm run dev",
   "installCommand": "npm install && cd frontend && npm install",
-  "framework": "nextjs",
-  "functions": {
-    "frontend/app/api/upload/route.ts": {
-      "maxDuration": 300
-    }
-  }
+  "framework": "nextjs"
 }
