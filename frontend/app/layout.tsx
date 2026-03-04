@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'WonderLens Lab',
-  description: 'Frontier research on systems for reliable machine vision.',
+  title: 'WonderLens AI',
+  description: 'Industrial vision intelligence built around your operational problems.',
 }
 
 export default function RootLayout({
