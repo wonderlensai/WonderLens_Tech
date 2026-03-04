@@ -1347,6 +1347,21 @@ img {
     padding-bottom: 64px;
   }
 
+  .wl-hero-meta {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .wl-hero-title {
+    font-size: clamp(44px, 12vw, 76px);
+    line-height: 0.96;
+  }
+
+  .wl-hero-rule {
+    margin: 28px 0;
+  }
+
   .wl-hero-bottom,
   .wl-band-grid,
   .wl-split-intro,
@@ -1362,6 +1377,46 @@ img {
     gap: 40px;
   }
 
+  .wl-hero-actions,
+  .wl-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wl-hero-actions .wl-btn-dark,
+  .wl-hero-actions .wl-btn-outline,
+  .wl-form-actions .wl-btn-light,
+  .wl-form-actions .wl-btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wl-form-actions span {
+    display: none;
+  }
+
+  .wl-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .wl-case-grid,
+  .wl-process-grid {
+    gap: 18px;
+    background: transparent;
+    border: 0;
+  }
+
+  .wl-case-card,
+  .wl-process-card {
+    padding: 32px 24px;
+  }
+
+  .wl-case-sector {
+    display: none;
+  }
+
   .wl-use-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -1369,6 +1424,7 @@ img {
   .wl-cam-panel,
   .wl-feed {
     min-height: 320px;
+    border-right: 0;
   }
 
   .wl-cta {
@@ -1409,6 +1465,88 @@ img {
 
   .wl-brand {
     font-size: 17px;
+  }
+
+  .wl-hero-meta hr {
+    display: none;
+  }
+
+  .wl-hero-meta span {
+    width: 100%;
+  }
+
+  .wl-hero-title {
+    font-size: clamp(36px, 17vw, 58px);
+  }
+
+  .wl-hero-insight,
+  .wl-band-copy,
+  .wl-section-copy,
+  .wl-body-copy,
+  .wl-cta-copy {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .wl-stats {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .wl-case-card,
+  .wl-process-card,
+  .wl-use-card {
+    padding: 24px 18px;
+  }
+
+  .wl-case-problem,
+  .wl-process-card h3 {
+    font-size: 20px;
+  }
+
+  .wl-compare-row {
+    grid-template-columns: 1fr;
+  }
+
+  .wl-compare-row > div {
+    padding: 14px 16px;
+  }
+
+  .wl-compare-row > div:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--wl-rule);
+  }
+
+  .wl-intel-bar,
+  .wl-intel-foot {
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .wl-cam-panel,
+  .wl-feed {
+    min-height: 260px;
+  }
+
+  .wl-cta-title {
+    font-size: clamp(34px, 15vw, 52px);
+    line-height: 1;
+  }
+
+  .wl-form-panel {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .wl-textarea {
+    min-height: 112px;
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+
+  .wl-cta-note {
+    line-height: 1.7;
   }
 
 }
